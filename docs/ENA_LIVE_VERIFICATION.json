@@ -1,0 +1,58 @@
+{
+  "repository": "ENA",
+  "accession": "PRJEB6272",
+  "retrieved": "2026-10-10T04:41:05.840422+00:00",
+  "url": "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=PRJEB6272&result=read_run&fields=run_accession%2Csample_accession%2Cscientific_name&format=tsv",
+  "terms_url": "https://ena-browser-docs.readthedocs.io/en/latest/about/policies.html",
+  "reuse_status": "Repository terms apply; no blanket license asserted for separately linked data",
+  "bytes": 371,
+  "sha256": "0c844a451d0c83e7674bac1443f84e60ae5fc9d32c75c3861f03f0f377c8d2e2",
+  "runs": [
+    {
+      "run_accession": "ERR577490",
+      "sample_accession": "SAMEA2697124",
+      "scientific_name": "Homo sapiens"
+    },
+    {
+      "run_accession": "ERR577497",
+      "sample_accession": "SAMEA2697131",
+      "scientific_name": "Homo sapiens"
+    },
+    {
+      "run_accession": "ERR577493",
+      "sample_accession": "SAMEA2697127",
+      "scientific_name": "Homo sapiens"
+    },
+    {
+      "run_accession": "ERR577495",
+      "sample_accession": "SAMEA2697129",
+      "scientific_name": "Homo sapiens"
+    },
+    {
+      "run_accession": "ERR577496",
+      "sample_accession": "SAMEA2697130",
+      "scientific_name": "Homo sapiens"
+    },
+    {
+      "run_accession": "ERR577494",
+      "sample_accession": "SAMEA2697128",
+      "scientific_name": "Homo sapiens"
+    },
+    {
+      "run_accession": "ERR577491",
+      "sample_accession": "SAMEA2697125",
+      "scientific_name": "Homo sapiens"
+    },
+    {
+      "run_accession": "ERR577492",
+      "sample_accession": "SAMEA2697126",
+      "scientific_name": "Homo sapiens"
+    },
+    {
+      "run_accession": "ERR577498",
+      "sample_accession": "SAMEA2697132",
+      "scientific_name": "Homo sapiens"
+    }
+  ],
+  "scope": "Run/sample accession metadata only; specimen age and ancient status require the cited study; no genotypes downloaded or relatedness inferred"
+}

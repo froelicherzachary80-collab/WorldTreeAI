@@ -1,0 +1,15 @@
+PRAGMA foreign_keys=ON;
+CREATE TABLE IF NOT EXISTS migrations(version INTEGER PRIMARY KEY);
+INSERT OR IGNORE INTO migrations VALUES(1);
+CREATE TABLE IF NOT EXISTS people(id TEXT PRIMARY KEY,name TEXT NOT NULL,birth TEXT DEFAULT '',death TEXT DEFAULT '',place TEXT DEFAULT '',aliases TEXT DEFAULT '',notes TEXT DEFAULT '',status TEXT DEFAULT 'hypothesis',living INTEGER DEFAULT 1,private INTEGER DEFAULT 1,synthetic INTEGER DEFAULT 0);
+CREATE INDEX IF NOT EXISTS people_name ON people(name);
+CREATE TABLE IF NOT EXISTS edges(id TEXT PRIMARY KEY,a TEXT REFERENCES people(id),b TEXT REFERENCES people(id),kind TEXT,status TEXT,citation TEXT,UNIQUE(a,b,kind));
+CREATE INDEX IF NOT EXISTS edge_a ON edges(a); CREATE INDEX IF NOT EXISTS edge_b ON edges(b);
+CREATE TABLE IF NOT EXISTS evidence(id TEXT PRIMARY KEY,person TEXT REFERENCES people(id),title TEXT,url TEXT,notes TEXT,verified INTEGER DEFAULT 0);
+CREATE TABLE IF NOT EXISTS dna(id TEXT PRIMARY KEY,person TEXT REFERENCES people(id),provider TEXT,build TEXT,markers INTEGER,digest TEXT UNIQUE,consent TEXT,authority TEXT,created TEXT,blob BLOB);
+CREATE TABLE IF NOT EXISTS matches(id TEXT PRIMARY KEY,owner TEXT REFERENCES people(id),person TEXT REFERENCES people(id),provider TEXT,external_id TEXT,cm REAL,pct REAL,prediction TEXT,notes TEXT,raw TEXT,UNIQUE(owner,provider,external_id));
+CREATE TABLE IF NOT EXISTS photos(id TEXT PRIMARY KEY,person TEXT REFERENCES people(id),permission TEXT,original BLOB,preview BLOB);
+CREATE TABLE IF NOT EXISTS imports(digest TEXT PRIMARY KEY,kind TEXT,result TEXT);
+CREATE TABLE IF NOT EXISTS identities(namespace TEXT,external_id TEXT,person TEXT REFERENCES people(id),PRIMARY KEY(namespace,external_id));
+CREATE TABLE IF NOT EXISTS tasks(id TEXT PRIMARY KEY,person TEXT REFERENCES people(id),question TEXT,status TEXT,result TEXT,created TEXT);
+CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY AUTOINCREMENT,at TEXT,action TEXT,details TEXT);

@@ -1,0 +1,53 @@
+name: WorldTreeAI Windows Release
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    tags: ['v0.2*']
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r requirements.txt "pyinstaller>=6.16,<7"
+      - run: npm ci
+        working-directory: frontend
+      - run: npm run build
+        working-directory: frontend
+      - run: python -m pytest tests -q
+        env:
+          QT_QPA_PLATFORM: offscreen
+      - run: python -m PyInstaller --noconfirm WorldTreeAI.spec
+      - name: Verify PE subsystem and packaged GUI startup
+        shell: pwsh
+        run: |
+          $bytes = [System.IO.File]::ReadAllBytes('dist/WorldTreeAI/WorldTreeAI.exe')
+          if ($bytes[0] -ne 77 -or $bytes[1] -ne 90) { throw 'Not a PE executable' }
+          $pe = [BitConverter]::ToInt32($bytes,0x3c)
+          $subsystem = [BitConverter]::ToUInt16($bytes,$pe + 24 + 68)
+          if ($subsystem -ne 2) { throw 'Not Windows GUI subsystem' }
+          $env:WORLDTREE_DATA = Join-Path $env:RUNNER_TEMP 'worldtree-smoke'
+          $env:QT_QPA_PLATFORM = 'windows'
+          $process = Start-Process 'dist/WorldTreeAI/WorldTreeAI.exe' -PassThru
+          Start-Sleep -Seconds 15
+          if ($process.HasExited) { throw 'Packaged executable exited unexpectedly' }
+          if ($process.MainWindowHandle -eq 0) { throw 'No native window appeared' }
+          Stop-Process -Id $process.Id
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WorldTreeAI-V0.2-Windows-x64-portable
+          path: dist/WorldTreeAI/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Windows-build-diagnostics
+          path: build/WorldTreeAI/warn-WorldTreeAI.txt

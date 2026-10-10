@@ -1,0 +1,5 @@
+# 23andMe raw data
+# build 37
+# rsid chromosome position genotype
+rs1 1 100 AG
+rs2 1 200 CT
